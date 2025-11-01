@@ -15,6 +15,15 @@ import type { GameState, Player } from './lib/games/uno/types';
 const app = express();
 app.use(cors());
 
+// Health check endpoint for Render
+app.get('/', (req, res) => {
+  res.status(200).json({ status: 'ok', message: 'UNO server is running' });
+});
+
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'healthy' });
+});
+
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
