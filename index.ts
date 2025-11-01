@@ -80,13 +80,16 @@ io.on('connection', (socket: Socket) => {
 
       room.connections.set(socket.id, socket);
 
-      // Send current game state
+      // Send current game state or players list to the newly joined player
       if (room.gameState) {
         socket.emit('game_state', { state: room.gameState });
+      } else {
+        // Send current players list to newly joined player
+        socket.emit('players_list', { players: room.players });
       }
 
-      // Notify others
-      broadcastToRoom(roomId, 'player_joined', { player });
+      // Notify all players in the room about the new player
+      broadcastToRoom(roomId, 'player_joined', { player, players: room.players });
 
       console.log(`Room ${roomId} now has ${room.players.length} players`);
     }
